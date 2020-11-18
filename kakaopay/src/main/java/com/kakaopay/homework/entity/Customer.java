@@ -15,6 +15,12 @@ public class Customer  {
 	private int id;
 	private String name;
 	private int amount;
+	
+	@Override
+	public String toString() {
+		 return "Customer [id=" + id + ", name=" + name + ", amount"+amount+"]";
+    }
+	
 	public int getId() {
 		return id;
 	}
@@ -34,10 +40,7 @@ public class Customer  {
 		this.amount = amount;
 	}
 	
-	@Override
-	public String toString() {
-		 return "Customer [id=" + id + ", name=" + name + ", amount"+amount+"]";
-    }
+	
 	
 	
 }
