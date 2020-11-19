@@ -18,17 +18,35 @@ public class Spread{
 	
 	@Id
 	private String token;
+	
 	private String roomId;
+	
 	private int regId;
+	
 	private String regDate;
+	
+	@Column(nullable = true)
 	private int receivId;
-	private String recivDate;
-	private int money;
-
+	
+	@Column(nullable = true)
+	private String recivDate;	
+	
+	@Column(nullable = true)
+	private int amount;			//입력금액
+	
+	@Column(nullable = true)
+	private int cnt;			//수령인 숫자
+	
+	private int money;			//수령금액
+	
+	
+	
 	@Override
 	public String toString() {
-		 return "Room [id=" + roomId + ", name=" + regId+"]";
-    }
+		return "Spread [token=" + token + ", roomId=" + roomId + ", regId=" + regId + ", regDate=" + regDate
+				+ ", receivId=" + receivId + ", recivDate=" + recivDate + ", amount=" + amount + ", cnt=" + cnt
+				+ ", money=" + money + "]";
+	}
 
 	public String getToken() {
 		return token;
@@ -84,6 +102,22 @@ public class Spread{
 
 	public void setMoney(int money) {
 		this.money = money;
+	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	public int getCnt() {
+		return cnt;
+	}
+
+	public void setCnt(int cnt) {
+		this.cnt = cnt;
 	}
 	
 	

@@ -18,8 +18,8 @@ public class Room{
 	
 	@Override
 	public String toString() {
-		 return "Room [roomId=" + roomId + ", roomName=" + roomName+"]";
-    }
+		return "Room [seq=" + seq + ", roomId=" + roomId + ", roomName=" + roomName + "]";
+	}
 
 	public int getSeq() {
 		return seq;

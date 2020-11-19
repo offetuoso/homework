@@ -1,10 +1,10 @@
-insert into customer(id, name, amount) values(1, '라이언',10001);
-insert into customer(id, name, amount) values(2, '무지',10002);
-insert into customer(id, name, amount) values(3, '제이지',10003);
-insert into customer(id, name, amount) values(4, '콘',10004);
-insert into customer(id, name, amount) values(5, '튜브',10005);
-insert into customer(id, name, amount) values(6, '어피치',10006);
-insert into customer(id, name, amount) values(7, '춘식이',10007);
+insert into customer(id, name, amount) values(1, '라이언',10000000);
+insert into customer(id, name, amount) values(2, '무지',10000000);
+insert into customer(id, name, amount) values(3, '제이지',10000000);
+insert into customer(id, name, amount) values(4, '콘',10000000);
+insert into customer(id, name, amount) values(5, '튜브',10000000);
+insert into customer(id, name, amount) values(6, '어피치',10000000);
+insert into customer(id, name, amount) values(7, '춘식이',10000000);
 
 
 insert into room(room_id, room_Name) values('R0001','카카오프렌즈');
@@ -21,6 +21,10 @@ insert into member(room_id, id, nick_name) values('R0001', 7, '막내 춘식이'
 
 
 /*
+
+insert into SPREAD (ROOM_ID ,TOKEN ,MONEY ,REG_ID ,REG_DATE ) values ('R00001', 'oj4', 79, 1, 20201120012707)
+
+
 --룸, 멤버, 유저 
 
 SELECT R.ROOM_ID AS X_ROOM_ID
