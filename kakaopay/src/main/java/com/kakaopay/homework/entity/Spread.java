@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import lombok.EqualsAndHashCode;
 
 
@@ -17,26 +19,31 @@ public class Spread{
 	
 	
 	@Id
-	private String token;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int seq;
 	
+	@Column(nullable = true)
+	private String token;
+	@Column(nullable = true)
 	private String roomId;
 	
 	private int regId;
-	
+	@Column(nullable = true)
 	private String regDate;
 	
-	@Column(nullable = true)
+	@ColumnDefault("0")
 	private int receivId;
 	
 	@Column(nullable = true)
 	private String recivDate;	
 	
-	@Column(nullable = true)
+	@ColumnDefault("0")
 	private int amount;			//입력금액
 	
-	@Column(nullable = true)
+	@ColumnDefault("0") //default 0
 	private int cnt;			//수령인 숫자
 	
+	@ColumnDefault("0")
 	private int money;			//수령금액
 	
 	

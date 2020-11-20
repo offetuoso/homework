@@ -20,7 +20,61 @@ insert into member(room_id, id, nick_name) values('R0001', 7, '막내 춘식이'
 
 
 
+
 /*
+
+
+
+SELECT 
+R.ROOM_NAME
+, S.REG_ID
+, S.REG_DATE
+, S.TOKEN
+
+  FROM SPREAD S
+INNER JOIN ROOM R ON (S.ROOM_ID = R.ROOM_ID )
+where S.room_id = 'R0001'
+and S.reg_id= 1
+and S.reg_date = (
+SELECT MAX(REG_DATE) LAST FROM SPREAD 
+where room_id = 'R0001'
+and reg_id= 1
+group by ROOM_ID ,REG_ID
+);
+
+
+
+
+
+
+
+
+
+
+
+
+insert into SPREAD (TOKEN ,MONEY ,REG_DATE ,REG_ID ,ROOM_ID )
+values('qA1' , 500  ,to_char(sysdate, 'YYYYMMDDHH24MISS'),1,'R00001' ); //뿌리기 테스트용 더미데이터ㅌ
+
+
+
+
+select * from SPREAD 
+where room_id = 'R00001'
+and token =  'qA1'
+and to_char(DATEADD(MINUTE, +10, to_date(reg_date, 'YYYYMMDDHH24MISS') ) , 'YYYYMMDDHH24MISS')  >  to_char(sysdate, 'YYYYMMDDHH24MISS')
+
+
+DATEADD(MINUTE, -10, SYSDATE) , 'YYYYMMDD HH24:MI:SS'), 10분
+
+
+
+
+
+insert into SPREAD (TOKEN ,AMOUNT ,CNT ,MONEY ,RECEIV_ID ,RECIV_DATE ,REG_DATE ,REG_ID ,ROOM_ID, AMOUNT )
+values('qA3' , 2000 , 3 ,500 , 2 , '' ,'20201120123500',1,'R00001' , 0 ,  )
+
+
 --룸, 멤버, 유저 
 
 SELECT R.ROOM_ID AS X_ROOM_ID

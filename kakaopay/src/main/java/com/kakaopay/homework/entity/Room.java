@@ -1,4 +1,4 @@
-package com.kakaopay.homework.entity;
+ package com.kakaopay.homework.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

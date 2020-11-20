@@ -1,7 +1,6 @@
 package com.kakaopay.homework.controller;
 
 
-import java.net.http.HttpRequest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,17 +18,20 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kakaopay.homework.dao.CustomerRepository;
+import com.kakaopay.homework.dao.SpreadRepository;
 import com.kakaopay.homework.entity.Customer;
 import com.kakaopay.homework.entity.Result;
 import com.kakaopay.homework.entity.Spread;
 
 import ch.qos.logback.classic.spi.PackagingDataCalculator;
+import lombok.Data;
 
 @RestController
 public class HomeworkController {
-	private CustomerRepository repository;
+	//private CustomerRepository repository;
+	private SpreadRepository repository;
 
-	public HomeworkController(CustomerRepository repository) {
+	public HomeworkController(SpreadRepository repository) {
 		super();
 		this.repository = repository;
 	}
@@ -48,6 +50,9 @@ public class HomeworkController {
 		
 		// parameter 없는경우 500 에러 처리
 		
+		int id = Integer.parseInt(request.getHeader("X-USER-ID").toString());
+		String roomId = request.getHeader("X-ROOM-ID");
+		
 		Result result = new Result();
 	 	
 		Date today = new Date();
@@ -61,8 +66,6 @@ public class HomeworkController {
 			
         }else {
         	
-        	int id = Integer.parseInt(request.getHeader("X-USER-ID").toString());
-        	String roomId = request.getHeader("X-ROOM-ID");
         	Spread data = new Spread();
         	data.setRegId(id);
         	data.setRoomId(roomId);
@@ -76,6 +79,9 @@ public class HomeworkController {
         	
         }
 		
+		
+		repository.findCreatedSpreadList(roomId, id);
+		
 		if(result.getStatus() == null) {
 			result.setStatus("200");
 			result.setMessage("성공");
@@ -86,42 +92,56 @@ public class HomeworkController {
 	}
 	
 	
-	
-	
-	
 	private void calculator(Spread data) {
 		int amount = data.getAmount(); 	//입력금액
-		int cnt = data.getCnt();					//수령인 숫자
+		int cnt = data.getCnt();		//수령인 숫자
 		int money = 0;					//수령금액
 		int regId = data.getRegId();
 		String roomId = data.getRoomId();
 		String regDate = data.getRegDate();
-		
+		String token = null;
+		Spread obj = new Spread();
 		
 		if(cnt != 0){
             
-            
+			/*
+             * 		수령금액 생
+             * */
+			
             if(cnt !=1 ){
                 money = (int)(Math.random() * (amount- cnt) + 1 ) ;
             }else{
                 money = amount;
             }
             
-            //수령금액
             
+            /*
+             * 		토큰 생성후 사용중인 토큰이 나오면 다시 생성
+             * */
             Spread result = new Spread(); 
+            
+            while(obj != null) {
+            	token = createToken(result);
+            	result.setToken(token);
+            	
+            	obj = repository.findToken(roomId, token );
+            	
+            }
+            
             result.setMoney(money);
-            result.setToken("aaa");
-            result.setAmount(amount-money);
-            result.setCnt(cnt-1);
+            result.setToken(token);
             result.setRegId(regId);
             result.setRoomId(roomId);
             result.setRegDate(regDate);
             
-            result.setToken(createToken(result));
             
-            System.out.println(result.toString());
+            /*
+             * 		결과 저장 
+             * */
+            repository.save(result);     
             
+            result.setAmount(amount-money);
+            result.setCnt(cnt-1);
             calculator(result);
 		}
 		
@@ -152,73 +172,16 @@ public class HomeworkController {
 		
 		return temp.toString();
 	}
-
-	@PutMapping("/customer")
-	public Customer putCustomer(Customer customer) {
+	
+	
+	
+	@GetMapping("/spread/list")
+	public List<Spread> allSpread() {
 		
-		return repository.save(customer);
+		return (List<Spread>) repository.findAll();
 		
 	}
 	
-	@PostMapping("/customer")
-	public Customer postCustomer(Customer customer) {
-		
-		return repository.save(customer);
-		
-	}
-	
-	@DeleteMapping("/customer")
-	public void deleteCustomer(int id) {
-		
-		repository.deleteById(id);
-		
-	}
-	
-	@GetMapping("/customer")
-	public Customer getCustomer(int id) {
-		
-		return repository.findById(id).orElse(null);
-		
-	}
-	
-	@GetMapping("/customer/list")
-	public List<Customer> allCustomer() {
-		
-		return (List<Customer>) repository.findAll();
-		
-	}
-	
-	@GetMapping("/customer/name")
-    public List<Customer> getCustomer(String name) {
-		
-		return repository.findByName(name);
-		
-	}
-	
-	@GetMapping("/customer/search")
-	public List<Customer> searchCustomer(String name) {
-		
-		return repository.findByNameLike("%"+name+"%");
-		
-	}
-	
-	@GetMapping("/customer/vip/list")
-	public List<Customer> vipCustomer(String value1, String value2) {
-		
-		return (List<Customer>) repository.findVipList(value1, value2);
-				
-		
-	}
-	
-	@GetMapping("/customer/vip2/list")
-	public List<Customer> vip2Customer(String value1, String value2) {
-		
-		return (List<Customer>) repository.findVipList(value1, value2);
-		
-		
-	}
-	
-		
 	
 	
 }
