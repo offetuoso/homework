@@ -36,23 +36,40 @@ public class Spread{
 	
 	@Column(nullable = true)
 	private String recivDate;	
-	
+		
 	@ColumnDefault("0")
 	private int amount;			//입력금액
 	
-	@ColumnDefault("0") //default 0
+	@ColumnDefault("0")		  
 	private int cnt;			//수령인 숫자
 	
 	@ColumnDefault("0")
 	private int money;			//수령금액
 	
+	@ColumnDefault("0")
+	private int totalAmount;	//최초 입력금액
+	
+	@ColumnDefault("0")
+	private int totalCnt;		//총 수령인
+	
+	@Column(nullable = true)
+	private String nickName;
+
+	@Column(nullable = true)
+	private String roomName;
+	
+	@ColumnDefault("0")
+	private int maxMoney;
 	
 	
+	
+
 	@Override
 	public String toString() {
-		return "Spread [token=" + token + ", roomId=" + roomId + ", regId=" + regId + ", regDate=" + regDate
-				+ ", receivId=" + receivId + ", recivDate=" + recivDate + ", amount=" + amount + ", cnt=" + cnt
-				+ ", money=" + money + "]";
+		return "Spread [seq=" + seq + ", token=" + token + ", roomId=" + roomId + ", regId=" + regId + ", regDate="
+				+ regDate + ", receivId=" + receivId + ", recivDate=" + recivDate + ", amount=" + amount + ", cnt="
+				+ cnt + ", money=" + money + ", totalAmount=" + totalAmount + ", totalCnt=" + totalCnt + ", nickName="
+				+ nickName + ", roomName=" + roomName + ", maxMoney=" + maxMoney + "]";
 	}
 
 	public String getToken() {
@@ -126,6 +143,41 @@ public class Spread{
 	public void setCnt(int cnt) {
 		this.cnt = cnt;
 	}
+
+	public int getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public int getTotalCnt() {
+		return totalCnt;
+	}
+
+	public void setTotalCnt(int totalCnt) {
+		this.totalCnt = totalCnt;
+	}
 	
-	
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public String getRoomName() {
+		return roomName;
+	}
+	public void setRoomName(String roomName) {
+		this.roomName = roomName;
+	}
+	public int getMaxMoney() {
+		return maxMoney;
+	}
+	public void setMaxMoney(int maxMoney) {
+		this.maxMoney = maxMoney;
+	}
 }

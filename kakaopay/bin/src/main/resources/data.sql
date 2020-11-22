@@ -22,6 +22,24 @@ insert into member(room_id, id, nick_name) values('R0001', 7, '막내 춘식이'
 
 /*
 
+
+select S.ROOM_ID
+        , R.ROOM_NAME
+        , S.TOKEN , S.MONEY
+        , S.REG_ID
+        , M.NICK_NAME
+        , S.REG_DATE 
+
+
+ from SPREAD S
+INNER JOIN ROOM R ON (S.ROOM_ID  = R.ROOM_ID )
+INNER JOIN MEMBER M ON ( M.room_id = R.ROOM_ID AND M.ID = S.REG_ID )
+
+          where S.room_id = 'R0001'
+                       and S.reg_id = 1
+                   
+                   
+
 insert into SPREAD (ROOM_ID ,TOKEN ,MONEY ,REG_ID ,REG_DATE ) values ('R00001', 'oj4', 79, 1, 20201120012707)
 
 
