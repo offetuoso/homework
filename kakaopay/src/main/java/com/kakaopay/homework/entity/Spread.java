@@ -29,13 +29,13 @@ public class Spread{
 	
 	private int regId;
 	@Column(nullable = true)
-	private String regDate;
+	private String regDate;		//등록시간 -- 토큰의 그룹 seq 용도로도 사용
 	
 	@ColumnDefault("0")
-	private int receivId;
+	private int receiveId;
 	
 	@Column(nullable = true)
-	private String recivDate;	
+	private String receiveDate;	
 		
 	@ColumnDefault("0")
 	private int amount;			//입력금액
@@ -61,15 +61,13 @@ public class Spread{
 	@ColumnDefault("0")
 	private int maxMoney;
 	
-	
-	
 
 	@Override
 	public String toString() {
 		return "Spread [seq=" + seq + ", token=" + token + ", roomId=" + roomId + ", regId=" + regId + ", regDate="
-				+ regDate + ", receivId=" + receivId + ", recivDate=" + recivDate + ", amount=" + amount + ", cnt="
-				+ cnt + ", money=" + money + ", totalAmount=" + totalAmount + ", totalCnt=" + totalCnt + ", nickName="
-				+ nickName + ", roomName=" + roomName + ", maxMoney=" + maxMoney + "]";
+				+ regDate + ", receiveId=" + receiveId + ", receiveDate=" + receiveDate + ", amount=" + amount
+				+ ", cnt=" + cnt + ", money=" + money + ", totalAmount=" + totalAmount + ", totalCnt=" + totalCnt
+				+ ", nickName=" + nickName + ", roomName=" + roomName + ", maxMoney=" + maxMoney + "]";
 	}
 
 	public String getToken() {
@@ -79,6 +77,7 @@ public class Spread{
 	public void setToken(String token) {
 		this.token = token;
 	}
+
 
 	public String getRoomId() {
 		return roomId;
@@ -104,20 +103,20 @@ public class Spread{
 		this.regDate = regDate;
 	}
 
-	public int getReceivId() {
-		return receivId;
+	public int getReceiveId() {
+		return receiveId;
 	}
 
-	public void setReceivId(int receivId) {
-		this.receivId = receivId;
+	public void setReceiveId(int receiveId) {
+		this.receiveId = receiveId;
 	}
 
-	public String getRecivDate() {
-		return recivDate;
+	public String getReceiveDate() {
+		return receiveDate;
 	}
 
-	public void setRecivDate(String recivDate) {
-		this.recivDate = recivDate;
+	public void setReceiveDate(String receiveDate) {
+		this.receiveDate = receiveDate;
 	}
 
 	public int getMoney() {
