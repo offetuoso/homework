@@ -17,47 +17,61 @@ import lombok.EqualsAndHashCode;
 @Entity
 public class Spread{
 	
-	
-	@Id
+	//뿌리기 시퀀스
+	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int seq;
 	
+	//토큰
 	@Column(nullable = true)
 	private String token;
+	
+	//방번호
 	@Column(nullable = true)
 	private String roomId;
 	
+	//생성자
 	private int regId;
 	@Column(nullable = true)
 	private String regDate;		//등록시간 -- 토큰의 그룹 seq 용도로도 사용
 	
+	//수령자
 	@ColumnDefault("0")
 	private int receiveId;
 	
+	//수령일
 	@Column(nullable = true)
 	private String receiveDate;	
-		
-	@ColumnDefault("0")
-	private int amount;			//입력금액
 	
+	//입력금액, 남은금액
+	@ColumnDefault("0")
+	private int amount;			
+	
+	//수령인 숫자, 받은 카운트
 	@ColumnDefault("0")		  
-	private int cnt;			//수령인 숫자
+	private int cnt;			
 	
+	//수령금액
 	@ColumnDefault("0")
-	private int money;			//수령금액
+	private int money;			
 	
+	//총 입력금액
 	@ColumnDefault("0")
 	private int totalAmount;	//최초 입력금액
 	
+	//총 수령인
 	@ColumnDefault("0")
-	private int totalCnt;		//총 수령인
+	private int totalCnt;		
 	
+	//닉네임
 	@Column(nullable = true)
 	private String nickName;
 
+	//방이름
 	@Column(nullable = true)
 	private String roomName;
 	
+	//최대 수령금액 
 	@ColumnDefault("0")
 	private int maxMoney;
 	

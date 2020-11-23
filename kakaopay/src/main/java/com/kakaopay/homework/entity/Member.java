@@ -9,11 +9,18 @@ import javax.persistence.Id;
 @Entity
 public class Member{
 	
+	//방 멤버 시퀀스
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int seq;
+	
+	//방번호
 	private String roomId;
+	
+	//유저 아이디
 	private int id;
+	
+	//닉네임
 	private String nickName;
 	
 	@Override

@@ -9,11 +9,15 @@ import javax.persistence.Id;
 @Entity
 public class Room{
 	
-	
+	//방 시퀀스
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int seq;
+	
+	//방번호
 	private String roomId;
+	
+	//방이름
 	private String roomName;
 	
 	@Override

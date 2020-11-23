@@ -9,11 +9,15 @@ import javax.persistence.Id;
 @Entity
 public class Customer  {
 	
-	
+	//유저아이디
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	
+	//이름
 	private String name;
+	
+	//계좌잔액
 	private int amount;
 	
 	@Override

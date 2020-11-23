@@ -30,19 +30,23 @@ public class HomeworkController {
 	 *                             
 	 * param		= int    money 		//뿌릴돈
 	 *              , int    cnt   		//받을 인원수
+	 *              
 	 * */
 	@PostMapping("/homework/first")
-	public Result spread(HttpServletRequest request, int amount, int cnt) {
+	public Result first(HttpServletRequest request, int amount, int cnt) {
 		
-		// parameter 없는경우 500 에러 처리
 		
+		//header에서 X-USER-ID, X-ROOM-ID 받아옴
 		int id = Integer.parseInt(request.getHeader("X-USER-ID").toString());
 		String roomId = request.getHeader("X-ROOM-ID");
 		
+
+		//토큰 그룹별 생성일 
 		Date today = new Date();
     	SimpleDateFormat sdf;
     	sdf = new SimpleDateFormat("yyyyMMddHHmmss");
     	
+    	//뿌리기 엔티티, id, 생성일, 방번호, 인원 추가
     	Spread data = new Spread();
     	data.setRegId(id);				
     	data.setRegDate(sdf.format(today));	//토큰별 동일한 시간 입력
@@ -57,23 +61,22 @@ public class HomeworkController {
 	
 	/***
 	 * req_type 	= post
-	 * uri			= /homework/first
+	 * uri			= /homework/second
 	 * header 		= int 	 X-USER-ID	//유저 id
 	 *              , String X-ROOM-ID 	//방 id
 	 *                             
-	 * param		= int    money 		//뿌릴돈
-	 *              , int    cnt   		//받을 인원수
+	 * param		= Stromg token 		//받을 토큰
 	 * */
 	@PostMapping("/homework/second")
-	public Result takeMoney(HttpServletRequest request, String token) {
+	public Result second(HttpServletRequest request, String token) {
 		
-		// parameter 없는경우 500 에러 처리
-	
+			//header에서 X-USER-ID, X-ROOM-ID 받아옴
 			int id = Integer.parseInt(request.getHeader("X-USER-ID").toString());
 			String roomId = request.getHeader("X-ROOM-ID");
 			
+			//받을 아이디, 토큰, 방번호
 			Spread data = new Spread();
-			data.setReceiveId(id);
+			data.setReceiveId(id);	
 			data.setToken(token);
 			data.setRoomId(roomId);
 			
@@ -84,26 +87,21 @@ public class HomeworkController {
 	
 	/***
 	 * req_type 	= post
-	 * uri			= /homework/first
+	 * uri			= /homework/third
 	 * header 		= int 	 X-USER-ID	//유저 id
-	 *              , String X-ROOM-ID 	//방 id
 	 *                             
-	 * param		= int    money 		//뿌릴돈
-	 *              , int    cnt   		//받을 인원수
+	 * param		= String token 		//조회할 토큰
 	 * */
 	@PostMapping("/homework/third")
-	public Result getHistory(HttpServletRequest request, String token) {
+	public Result third(HttpServletRequest request, String token) {
 		
-		// parameter 없는경우 500 에러 처리
-		
+		//header에서 X-USER-ID 받아옴
 		int id = Integer.parseInt(request.getHeader("X-USER-ID").toString());
-		String roomId = request.getHeader("X-ROOM-ID");
 		
-	
+		//아이디, 토큰
 		Spread data = new Spread();
 		data.setReceiveId(id);
 		data.setToken(token);
-		data.setRoomId(roomId);
 		
 		return service.thirdProccess(data);
 		

@@ -27,17 +27,7 @@ public interface HomeworkRepository extends CrudRepository<Spread, Integer> {
 	/*
 	 * 		토큰생성된 리스트 조회 
 	 * */
-	@Query(value="select S.SEQ			"
-			+ "        , S.ROOM_ID		"
-			+ "        , R.ROOM_NAME	"
-			+ "        , S.TOKEN "
-			+ "        , S.MONEY		"
-			+ "        , S.REG_ID		"
-			+ "        , M.NICK_NAME	"
-			+ "        , S.REG_DATE 	"
-			+ "        , S.TOTAL_AMOUNT "
-			+ "        , S.TOTAL_CNT	"
-			+ "        , S.CNT	"
+	@Query(value="select S.*	"
 			+ " from SPREAD S			"
 			+ "JOIN ROOM R ON (S.ROOM_ID  = R.ROOM_ID )		"
 			+ "JOIN MEMBER M ON ( M.room_id = R.ROOM_ID AND M.ID = S.REG_ID )	"
