@@ -1,4 +1,4 @@
-# Project Title / 카카오 선행과제 
+# Project Title / 카카오페이 선행과제 
 
 ** 카카오페이 뿌리기 기능 구현 **  
 Introduction
