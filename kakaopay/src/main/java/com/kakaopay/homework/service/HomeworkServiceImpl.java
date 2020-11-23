@@ -1,6 +1,7 @@
 package com.kakaopay.homework.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,8 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kakaopay.homework.dao.HomeworkRepository;
-import com.kakaopay.homework.entity.Result;
+import com.kakaopay.homework.vo.Errors;
+import com.kakaopay.homework.vo.FirstResult;
+import com.kakaopay.homework.vo.RecieveInfo;
+import com.kakaopay.homework.vo.Result;
+import com.kakaopay.homework.vo.SecondResult;
 import com.kakaopay.homework.entity.Spread;
+import com.kakaopay.homework.vo.ThirdResult;
 
 @Service("HomeworkService")
 public class HomeworkServiceImpl implements HomeworkService{
@@ -20,13 +26,15 @@ public class HomeworkServiceImpl implements HomeworkService{
 	private HomeworkRepository repository;
 	
 	public Result firstProccess(Spread spread) {
-		Result result = new Result();
+		FirstResult result = new FirstResult();
+		Errors errors  = new Errors();
 		StringBuffer msg = new StringBuffer();
+		List<Integer> idxs = new ArrayList<>();
+		
 		
 		String roomId = spread.getRoomId();
 		int id = spread.getRegId();
 		String token = "";
-		String idxs = "";
 		int maxMoney = 0;
 		int totalAmount = spread.getTotalAmount();
 		int totalCnt = spread.getTotalCnt();
@@ -38,9 +46,12 @@ public class HomeworkServiceImpl implements HomeworkService{
     	List<Spread> list = repository.findCreatedSpreadList(roomId, id);
     	
     	if(totalAmount < totalCnt){
-			result.setStatus("5XX");
-			result.setError("more than Amount");
-			result.setMessage("인원수 보다 많은 금액을 입력하세요.");
+    		errors.setStatus("5XX");
+    		errors.setError("more than Amount");
+    		errors.setMessage("인원수 보다 많은 금액을 입력하세요.");
+    		
+    		result.setSuccess(false);
+    		result.setErrors(errors);
 			
         }else {
         	if(list != null) {
@@ -51,8 +62,7 @@ public class HomeworkServiceImpl implements HomeworkService{
         		for (int i = 0; i < list.size(); i++) {
         			Spread data = list.get(i);
         			
-        			if(!idxs.equals("")) idxs+=",";
-        			idxs += ""+data.getCnt()+"";
+        			idxs.add(data.getCnt());
         			
         			if(maxMoney < data.getMoney() )
         				maxMoney = data.getMoney();
@@ -60,23 +70,29 @@ public class HomeworkServiceImpl implements HomeworkService{
         			if(i==0)
         				token = data.getToken();
         		}
-        		msg.append("'roomId':'"+roomId+"',");
-        		msg.append("'regId':'"+id+"',");
-        		msg.append("'amount':'"+totalAmount+"',");
-        		msg.append("'maxMoney':'"+maxMoney+"',");
-        		msg.append("'personCnt':'"+totalCnt+"',");
-        		msg.append("'token':'"+token+"',");
-        		msg.append("'idxs':["+idxs+"]");
+    
+        		result.setSuccess(true);
         		
-        		result.setStatus("200");
-        		result.setError("success");
-    			result.setMessage(msg.toString());
+    			errors.setStatus("200");
+    			errors.setError("success");;
+    			result.setErrors(errors);
     			
+        		result.setRegId(id);
+        		result.setRoomId(roomId);
+        		result.setAmount(totalAmount);
+    			result.setMaxMoney(maxMoney);
+    			result.setPersonCnt(totalAmount);
+    			result.setToken(token);
+    			result.setIdx(idxs);
+        		
         		
         	}else {
-        		result.setStatus("5XX");
-        		result.setError("not found result.");
-        		result.setMessage("결과를 찾을 수 없습니다.");
+        		errors.setStatus("5XX");
+        		errors.setError("not found result.");
+        		errors.setMessage("결과를 찾을 수 없습니다.");
+        		
+        		result.setSuccess(false);
+        		result.setErrors(errors);
         	}
         }
     	
@@ -144,7 +160,6 @@ public class HomeworkServiceImpl implements HomeworkService{
 	}
 	
 	public String createToken(Spread result) {
-		String roomId = result.getRoomId();
 		
 		StringBuffer token = new StringBuffer();
 		for (int i = 0; i < 3; i++) {
@@ -174,8 +189,9 @@ public class HomeworkServiceImpl implements HomeworkService{
 		int id = spread.getReceiveId();
 		String roomId = spread.getRoomId();
 		String token = spread.getToken();
-		Result result = new Result();
 		StringBuffer msg = new StringBuffer();
+		SecondResult result = new SecondResult();
+		Errors errors  = new Errors();
 		
 		int errorCnt = 0;
 
@@ -184,9 +200,12 @@ public class HomeworkServiceImpl implements HomeworkService{
 		Spread role1 = repository.findSecondRule1(roomId, token);
 		
 		if(role1== null){
-			result.setStatus("5XX");
-			result.setError("not found token");
-			result.setMessage("유효하지 않은 token입니다.");
+			errors.setStatus("5XX");
+			errors.setError("not found token");
+			errors.setMessage("유효하지 않은 token입니다.");
+			
+			result.setSuccess(false);
+			result.setErrors(errors);
 			errorCnt++;
 		}
 		
@@ -195,9 +214,12 @@ public class HomeworkServiceImpl implements HomeworkService{
 			Spread role3 = repository.findSecondRule3(roomId, token);
 			
 			if(role3== null){
-				result.setStatus("5XX");
-				result.setError("Tokens out of validity time");
-				result.setMessage("유효시간이 지난 토큰입니다.");
+				errors.setStatus("5XX");
+				errors.setError("Tokens out of validity time");
+				errors.setMessage("유효시간이 지난 토큰입니다.");
+				
+				result.setSuccess(false);
+				result.setErrors(errors);
 				errorCnt++;
 			}
 		}
@@ -207,9 +229,12 @@ public class HomeworkServiceImpl implements HomeworkService{
 			Spread role4 = repository.findSecondRule4(roomId, id, token);
 			
 			if(role4 == null){
-				result.setStatus("5XX");
-				result.setError("You have already received");
-				result.setMessage("뿌리기 당 한 사용자는 한번만 받을 수 있습니다.");
+				errors.setStatus("5XX");
+				errors.setError("You have already received");
+				errors.setMessage("뿌리기 당 한 사용자는 한번만 받을 수 있습니다.");
+				
+				result.setSuccess(false);
+				result.setErrors(errors);
 				errorCnt++;
 			}
 		}
@@ -219,9 +244,12 @@ public class HomeworkServiceImpl implements HomeworkService{
 			Spread role5 = repository.findSecondRule5(roomId, id,token);
 			
 			if(role5== null){
-				result.setStatus("5XX");
-				result.setError("You can't take your own.");
-				result.setMessage("자신이 뿌리기한 건은 자신이 받을 수 없습니다.");
+				errors.setStatus("5XX");
+				errors.setError("You can't take your own.");
+				errors.setMessage("자신이 뿌리기한 건은 자신이 받을 수 없습니다.");
+				
+				result.setSuccess(false);
+				result.setErrors(errors);
 				errorCnt++;
 			}
 		}
@@ -231,9 +259,12 @@ public class HomeworkServiceImpl implements HomeworkService{
 			Spread role2 = repository.findSecondRule2(roomId, id, token);
 			
 			if(role2== null){
-				result.setStatus("5XX");
-				result.setError("not found token");
-				result.setMessage("유효하지 않은 token입니다.");
+				errors.setStatus("5XX");
+				errors.setError("not found token");
+				errors.setMessage("유효하지 않은 token입니다.");
+				
+				result.setSuccess(false);
+				result.setErrors(errors);
 				errorCnt++;
 			}
 		}
@@ -244,9 +275,12 @@ public class HomeworkServiceImpl implements HomeworkService{
 			Spread data = repository.findMinCntByToken(roomId, token);
 			
 			if(data== null){
-				result.setStatus("5XX");
-				result.setError("token is empty");
-				result.setMessage("받을 수 있는 토큰이 없습니다.");
+				errors.setStatus("5XX");
+				errors.setError("token is empty");
+				errors.setMessage("받을 수 있는 토큰이 없습니다.");
+				
+				result.setSuccess(false);
+				result.setErrors(errors);
 				errorCnt++;
 			}else {
 				int cnt = data.getCnt();
@@ -256,25 +290,29 @@ public class HomeworkServiceImpl implements HomeworkService{
 				if(resultCnt != 0){
 					repository.deposit(id, amount);
 					
-					msg.append("'roomId':'"+roomId+"',");		
-					msg.append("'token':'"+token+"',");		
-					msg.append("'money':'"+amount+"',");		
-					msg.append("'roomId':'"+roomId+"'");		
+					result.setRoomId(roomId);
+					result.setToken(token);
+					result.setMoney(amount);
 					
 					
 				}else {
-					result.setStatus("5XX");
-					result.setError("token is empty");
-					result.setMessage("받을 수 있는 토큰이 없습니다.");
+					errors.setStatus("5XX");
+					errors.setError("token is empty");
+					errors.setMessage("받을 수 있는 토큰이 없습니다.");
+					
+					result.setSuccess(false);
+					result.setErrors(errors);
 					errorCnt++;
 				}
 			}
 		}
 		
-		if(errorCnt== 0 && result.getStatus() == null) {
-			result.setStatus("200");
-			result.setError("success");;
-			result.setMessage(msg.toString());
+		if(errorCnt== 0 && result.getSuccess() == null) {
+			errors.setStatus("200");
+			errors.setError("success");;
+			
+			result.setSuccess(true);
+			result.setErrors(errors);
 		}
 		
 		
@@ -287,8 +325,11 @@ public class HomeworkServiceImpl implements HomeworkService{
 		int id = spread.getReceiveId();
 		String roomId = spread.getRoomId();
 		String token = spread.getToken();
-		Result result = new Result();
+		
 		StringBuffer msg = new StringBuffer();
+		ThirdResult result = new ThirdResult();
+		Errors errors  = new Errors();
+		
 		
 		int errorCnt =0;
 
@@ -301,16 +342,20 @@ public class HomeworkServiceImpl implements HomeworkService{
 		List<Spread> list = repository.findThirdRule1(id, token);
 		
 		if(list.size() == 0){
-			result.setStatus("5XX");
-			result.setError("not found token");
-			result.setMessage("유효하지 않은 token입니다.");
+			errors.setStatus("5XX");
+			errors.setError("not found token");
+			errors.setMessage("유효하지 않은 token입니다.");
+			
+			result.setSuccess(false);
+			result.setErrors(errors);
 			errorCnt++;
 		}else{
 			String regDate = null;
 			int spreadAmount = 0;
 			int receivedAmount = 0;
 	
-			String receiveInfo = "";
+			RecieveInfo receiveInfo = null;
+			List<RecieveInfo> recieveList = new ArrayList<>();  
 			for (int i = 0; i < list.size(); i++) {
 				Spread data = list.get(i);
 				
@@ -322,26 +367,27 @@ public class HomeworkServiceImpl implements HomeworkService{
 				
 				receivedAmount += data.getMoney();
 				
-				if(receiveInfo != "") {
-					receiveInfo += ",";
-				}
-				receiveInfo+= "{\"amount\":"+data.getMoney()+",\"receieve_id\":\""+data.getReceiveId()+"\"}";
+				receiveInfo = new RecieveInfo();
+				receiveInfo.setAmount(data.getMoney());
+				receiveInfo.setReceieve_id(data.getReceiveId());
+				recieveList.add(receiveInfo);
 				
 			}
 			
-			msg.append("'reg_date':'"+regDate+"',");	
-			msg.append("'spread_amount':'"+spreadAmount+"',");
-			msg.append("'received_amount':'"+receivedAmount+"',");	
-			msg.append("'received_list':'["+receiveInfo+"']");	
-			
+			result.setRegDate(regDate);
+			result.setSpreadAmount(spreadAmount);
+			result.setReceivedAmount(receivedAmount);
+			result.setReceivedList(recieveList);
 		}
 		
 		
 		
-		if(errorCnt== 0 && result.getStatus() == null) {
-			result.setStatus("200");
-			result.setError("success");;
-			result.setMessage(msg.toString());
+		if(errorCnt== 0 && result.getSuccess() == null) {
+			errors.setStatus("200");
+			errors.setError("success");;
+			
+			result.setSuccess(true);
+			result.setErrors(errors);
 		}
 
 		return result;

@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.kakaopay.homework.entity.Customer;
 import com.kakaopay.homework.entity.Spread;
 
 

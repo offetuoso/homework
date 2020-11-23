@@ -2,43 +2,25 @@ package com.kakaopay.homework.controller;
 
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Random;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kakaopay.homework.dao.HomeworkRepository;
-import com.kakaopay.homework.entity.Customer;
-import com.kakaopay.homework.entity.Result;
+import com.kakaopay.homework.vo.Result;
 import com.kakaopay.homework.entity.Spread;
-import com.kakaopay.homework.service.HomeworkService;
 import com.kakaopay.homework.service.HomeworkServiceImpl;
 
-import ch.qos.logback.classic.spi.PackagingDataCalculator;
-import lombok.Data;
 
 @RestController
 public class HomeworkController {
-	private HomeworkRepository repository;
 	
 	@Autowired
 	HomeworkServiceImpl service;
-
-	public HomeworkController(HomeworkRepository repository) {
-		super();
-		this.repository = repository;
-	}
 	
 	/***
 	 * req_type 	= post
@@ -56,7 +38,6 @@ public class HomeworkController {
 		
 		int id = Integer.parseInt(request.getHeader("X-USER-ID").toString());
 		String roomId = request.getHeader("X-ROOM-ID");
-		Result result = new Result();
 		
 		Date today = new Date();
     	SimpleDateFormat sdf;

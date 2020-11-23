@@ -2,7 +2,7 @@ package com.kakaopay.homework.service;
 
 import java.util.List;
 
-import com.kakaopay.homework.entity.Result;
+import com.kakaopay.homework.vo.Result;
 import com.kakaopay.homework.entity.Spread;
 
 public interface HomeworkService {

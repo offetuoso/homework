@@ -1,11 +1,11 @@
-package com.kakaopay.homework.entity;
+package com.kakaopay.homework.vo;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 
 
-public class Result{
+public class Errors{
 	
 	private String status ;
 	private String error ;
@@ -28,7 +28,4 @@ public class Result{
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
-	
-	
 }
